@@ -4,3 +4,4 @@ package*.json
 .env
 Dockerfile
 docker-compose.yml
+.gitignore
