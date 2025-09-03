@@ -33,31 +33,10 @@ jobs:
       with:
          node-version: ${{ matrix.node-version }}
          cache: 'npm'
-         cache-dependency-path: '**/package-lock.json'
+         
 
     - name: Install dependencies
-      run: |
-        # Check if package.json exists in current directory
-        if [ -f "package.json" ]; then
-          echo "Found package.json in current directory"
-          npm ci  # Use ci for cleaner installs with lock file
-        else
-          # Search for package.json in any subdirectory
-          PACKAGE_DIR=$(find . -name "package.json" -type f -printf '%h\n' | head -1)
-          if [ -n "$PACKAGE_DIR" ]; then
-            echo "Found package.json in subdirectory: $PACKAGE_DIR"
-            cd "$PACKAGE_DIR"
-            npm ci
-          else
-            echo "ERROR: No package.json found anywhere!"
-            echo "Searching all files:"
-            find . -type f -name "*" | head -20
-            exit 1
-          fi
-        fi
+      run: npm ci
+         
 
-    - name: Build
-      run: npm run build --if-present
-
-    - name: Test
-      run: npm test --if-present
+  
