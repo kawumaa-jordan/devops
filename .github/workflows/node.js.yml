@@ -29,13 +29,12 @@ jobs:
     - run: npm install
     - run: npm run build --if-present
     - run: |
-        if [ -f "/home/ubuntu/actions-runner-backendserver/_work/devops/devops/package.json" ]; then
-          cd "/home/ubuntu/actions-runner-backendserver/_work/devops/devops"
-          npm install
-        elif [ -f "./package.json" ]; then
-          npm install
+        PACKAGE_DIR=$(find /home/ubuntu/actions-runner-backendserver/_work/ -name "package.json" -type f -printf '%h\n' | head -1)
+        if [ -n "$PACKAGE_DIR" ]; then
+           echo "Found package.json in: $PACKAGE_DIR"
+           cd "$PACKAGE_DIR"
+           npm install
         else
-          echo "ERROR: package.json not found in any expected location"
-          find . -name "package.json" -type f
-          exit 1
+           echo "ERROR: No package.json found!"
+           exit 1
         fi
